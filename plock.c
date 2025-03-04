@@ -102,13 +102,10 @@ void plock_acquire( plock_t *lock, int priority ){
   }
 
   pthread_cond_wait(&(node->waitCV), &(lock->mlock)); //wait for signal 
-
+  destroy_node(node);  //free node before unlocking
   pthread_mutex_unlock( &(lock->mlock)); //unlock the mutex 
 
-  //dangling pointer management
-  node = NULL;
-  ptr = NULL;
-  prev = NULL;
+
 }
 
 
@@ -124,7 +121,6 @@ void plock_release( plock_t *lock ){
     lock->head = node->next; //traverse list to next
 
     pthread_cond_signal(&(node->waitCV));
-    destroy_node(node);
   
   }
 
