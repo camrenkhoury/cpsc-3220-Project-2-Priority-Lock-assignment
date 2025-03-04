@@ -103,6 +103,7 @@ void plock_acquire( plock_t *lock, int priority ){
 
   pthread_cond_wait(&(node->waitCV), &(lock->mlock)); //wait for signal 
   destroy_node(node);  //free node before unlocking
+  usleep(1);         // small delay to allow memory updates to propagate
   pthread_mutex_unlock( &(lock->mlock)); //unlock the mutex 
 
 
@@ -121,6 +122,7 @@ void plock_release( plock_t *lock ){
     lock->head = node->next; //traverse list to next
 
     pthread_cond_signal(&(node->waitCV));
+    usleep(1);         // small delay to allow memory updates to propagate
   
   }
 
