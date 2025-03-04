@@ -85,7 +85,7 @@ void plock_acquire( plock_t *lock, int priority ){
   node = create_node(priority); //set node pointer equal to address returned by create_node function passed with the priority by the function caller
 
 
-  if(lock->head == NULL || lock->head->priority > priority) { 
+  if(lock->head == NULL || lock->head->priority < priority) { 
     node->next = lock->head;
     lock->head = node;
   } else {
